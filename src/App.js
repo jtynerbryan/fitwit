@@ -27,8 +27,7 @@ class App extends Component {
     return (
       <div>
         <NavBar color='black' title="FitWit"/>
-        <Welcome />
-        <Exercise exercise={this.state.arms[Math.floor(Math.random()*this.state.arms.length)]}/>
+        <Welcome exercise={this.state.arms[Math.floor(Math.random()*this.state.arms.length)]}/>
       </div>
     );
   }

@@ -1,5 +1,5 @@
 import React from 'react'
-import SignupForm from './SignupForm'
+import WorkoutContainer from './WorkoutContainer'
 
 class Welcome extends React.Component {
   constructor(){
@@ -25,7 +25,7 @@ class Welcome extends React.Component {
       <div>
         <h1>Welcome to FitWit</h1>
         <h4>blah blah blah</h4>
-        <SignupForm signup={this.handleSignup} />
+        <WorkoutContainer exercise={this.props.exercise}/>
       </div>
     )
   }
