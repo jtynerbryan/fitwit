@@ -4,7 +4,8 @@ import ReactHtmlParser from 'react-html-parser';
 const Exercise  = (props) => {
 	return <div>
 		<h1>{props.exercise.name}</h1>
-		{props.exercise.description? props.exercise.description.replace(/[<p></p>]+/g, ''): null}
+		{props.exercise.description ? ReactHtmlParser(props.exercise.description) : null}
+		<br></br>
 	</div>
 }
 
