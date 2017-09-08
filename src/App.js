@@ -15,6 +15,10 @@ class App extends Component {
   }
 
   componentDidMount() {
+    fetch('http://localhost:3001/api/v1/users')
+    .then(res => res.json())
+    .then(res => console.log(res))
+
     fetch('https://wger.de/api/v2/exercise/?muscles=1&license_author=wger.de&language=2')
     .then(res => res.json())
     .then(res => this.setState({
