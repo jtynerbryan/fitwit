@@ -4,7 +4,7 @@ import './App.css';
 import Exercise from './components/Exercise'
 import NavBar from './components/NavBar'
 import Welcome from './components/Welcome'
-import Form from './components/PlanForm'
+import PlanForm from './components/PlanForm'
 import WorkoutContainer from './components/WorkoutContainer'
 import {Link, Route} from 'react-router-dom'
 
@@ -13,14 +13,15 @@ class App extends Component {
     super()
 
     this.state = {
-      biceps: [0],
-      back: [0], 
-      shoulder: [0],
-      abs: [0], 
-      chest: [0],
-      triceps: [0], 
-      legs: [0],
-      calves: [0],
+      // biceps: [0],
+      // back: [0],
+      // shoulder: [0],
+      // abs: [0],
+      // chest: [0],
+      // triceps: [0],
+      // legs: [0],
+      // calves: [0],
+      exercises: [],
       plan: null
 
     }
@@ -77,13 +78,13 @@ class App extends Component {
     .then(res => res.json())
     .then(res => this.setState({
       calves: res["results"]
-    }))                  
+    }))
 
   }
 
-  createPlan = (object) => {
+  setPlanObject = (obj) => {
     this.setState({
-      plan: object
+      plan: obj
     })
   }
 
@@ -91,7 +92,7 @@ class App extends Component {
     return (
       <div>
         <NavBar color='black' title="FitWit"/>
-        {this.state.plan == null ? <Form createPlan={this.createPlan}/> : <WorkoutContainer plan={this.state.plan}/>}
+        {this.state.plan == null ? <PlanForm setPlanObject={this.setPlanObject}/> : <WorkoutContainer plan={this.state.plan}/>}
       </div>
     );
   }

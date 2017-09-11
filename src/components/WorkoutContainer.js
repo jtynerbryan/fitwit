@@ -1,15 +1,27 @@
 import React from 'react'
 import WeekContainer from './WeekContainer'
 
-const WorkoutContainer = (props) => {
-	return <div>
-	{for (let i = 1; i < props.plan.programLength; i++) {
-		<WeekContainer week={i} plan={props.plan}/>
-	}}
-	</div>
+class WorkoutContainer extends React.Component{
+	constructor(){
+		super()
+	}
+
+	workoutContainers = () => {
+		const allContainers = []
+		for(let i = 1; i <= this.props.plan.programLength; i++){
+			allContainers.push(<WeekContainer key={i} week={i} plan={this.props.plan}/>)
+		}
+		return allContainers
+	}
+
+	render(){
+		console.log('yaaa',this.workoutContainers())
+		return(
+			<div>
+				{this.workoutContainers().map(container => container)}
+			</div>
+		)
+	}
 }
 
-
 export default WorkoutContainer
-
-

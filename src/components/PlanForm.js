@@ -24,16 +24,16 @@ class PlanForm extends React.Component {
 				chestTriceps: true,
 				legsCalves: true
 
-			}, () => this.props.createPlan(this.state))
-		}		
-		
+			}, () => this.props.setPlanForm(this.state))
+		}
+
 
 	}
 
 	handleDaysAWeek = (event) => {
 		this.setState({
 			daysAWeek: parseInt(event.target.value)
-		})			
+		})
 	}
 
 	handleProgramLength = (event) => {
@@ -73,7 +73,7 @@ class PlanForm extends React.Component {
 		      <Checkbox label='Shoulder/abs' onChange={this.handleCheckbox} /><br/>
 		      <Checkbox label='Chest/triceps' onChange={this.handleCheckbox} /><br/>
 		      <Checkbox label='Legs/calves' onChange={this.handleCheckbox} />
-		    </Form.Field>		
+		    </Form.Field>
 		return (
 		  <Form onSubmit={this.handleSubmit}>
 		    <Form.Field>
