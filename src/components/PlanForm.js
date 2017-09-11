@@ -24,7 +24,7 @@ class PlanForm extends React.Component {
 				chestTriceps: true,
 				legsCalves: true
 
-			}, () => this.props.setPlanForm(this.state))
+			}, () => this.props.setPlanObject(this.state))
 		}
 
 

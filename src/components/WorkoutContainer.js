@@ -15,7 +15,6 @@ class WorkoutContainer extends React.Component{
 	}
 
 	render(){
-		console.log('yaaa',this.workoutContainers())
 		return(
 			<div>
 				{this.workoutContainers().map(container => container)}

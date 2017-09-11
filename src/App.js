@@ -13,17 +13,16 @@ class App extends Component {
     super()
 
     this.state = {
-      // biceps: [0],
-      // back: [0],
-      // shoulder: [0],
-      // abs: [0],
-      // chest: [0],
-      // triceps: [0],
-      // legs: [0],
-      // calves: [0],
-      exercises: [],
-      plan: null
-
+      biceps: [0],
+      back: [0],
+      shoulder: [0],
+      abs: [0],
+      chest: [0],
+      triceps: [0],
+      legs: [0],
+      calves: [0],
+      plan: null,
+      exercises: []
     }
   }
 
@@ -78,7 +77,7 @@ class App extends Component {
     .then(res => res.json())
     .then(res => this.setState({
       calves: res["results"]
-    }))
+    }, () => console.log(this.state)))
 
   }
 
@@ -86,6 +85,25 @@ class App extends Component {
     this.setState({
       plan: obj
     })
+    this.createPlan(obj)
+  }
+
+  randomExercises = (ar) => {
+    let array = ar.sort( function() {return 0.5 - Math.random() } )
+    return [array[0], array[1]]
+  }
+
+  createPlan = (obj) => {
+    if (obj.daysAWeek === 4) {
+      this.setState({
+        exercises: [...this.state.exercises, this.randomExercises(this.state.biceps), 
+        this.randomExercises(this.state.back), this.randomExercises(this.state.shoulder), 
+        this.randomExercises(this.state.abs), this.randomExercises(this.state.chest), 
+        this.randomExercises(this.state.triceps), this.randomExercises(this.state.legs),
+        this.randomExercises(this.state.calves)]
+
+      }, () => console.log(this.state.exercises))
+    }
   }
 
   render() {
