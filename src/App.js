@@ -5,6 +5,7 @@ import Exercise from './components/Exercise'
 import NavBar from './components/NavBar'
 import Welcome from './components/Welcome'
 import Form from './components/PlanForm'
+import WorkoutContainer from './components/WorkoutContainer'
 import {Link, Route} from 'react-router-dom'
 
 class App extends Component {
@@ -19,7 +20,8 @@ class App extends Component {
       chest: [0],
       triceps: [0], 
       legs: [0],
-      calves: []
+      calves: [0],
+      plan: null
 
     }
   }
@@ -79,12 +81,17 @@ class App extends Component {
 
   }
 
+  createPlan = (object) => {
+    this.setState({
+      plan: object
+    })
+  }
+
   render() {
-    console.log(this.state)
     return (
       <div>
         <NavBar color='black' title="FitWit"/>
-        <Form />
+        {this.state.plan == null ? <Form createPlan={this.createPlan}/> : <WorkoutContainer plan={this.state.plan}/>}
       </div>
     );
   }

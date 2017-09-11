@@ -17,14 +17,23 @@ class PlanForm extends React.Component {
 
 	handleSubmit = (event) => {
 		event.preventDefault()
+		if (this.state.daysAWeek === 4) {
+			this.setState({
+				backBiceps: true,
+				shoulderAbs: true,
+				chestTriceps: true,
+				legsCalves: true
 
+			}, () => this.props.createPlan(this.state))
+		}		
+		
 
 	}
 
 	handleDaysAWeek = (event) => {
 		this.setState({
 			daysAWeek: parseInt(event.target.value)
-		})
+		})			
 	}
 
 	handleProgramLength = (event) => {
@@ -34,31 +43,37 @@ class PlanForm extends React.Component {
 	}
 
 	handleCheckbox = (event) => {
-		console.log(event.target.innerHTML)
 		if (event.target.innerHTML === 'Back/biceps'){
 			this.setState({
 				backBiceps: !this.state.backBiceps
-			},()=>console.log(this.state))
+			})
 		}
 		else if (event.target.innerHTML === 'Shoulder/abs'){
 			this.setState({
 				shoulderAbs: !this.state.shoulderAbs
-			},()=>console.log(this.state))
+			})
 		}
 		else if (event.target.innerHTML === 'Chest/triceps'){
 			this.setState({
 				chestTriceps: !this.state.chestTriceps
-			},()=>console.log(this.state))
+			})
 		}
 		else if (event.target.innerHTML === 'Legs/calves'){
 			this.setState({
 				legsCalves: !this.state.legsCalves
-			},()=>console.log(this.state))
+			})
 		}
 
 	}
 
 	render() {
+		const checkbox =  <Form.Field>
+		    <label>If you're working out less than 4 days a week, please select the muscle groups you would like to work on</label>
+		      <Checkbox label='Back/biceps' name='backBiceps' onChange={this.handleCheckbox} /><br/>
+		      <Checkbox label='Shoulder/abs' onChange={this.handleCheckbox} /><br/>
+		      <Checkbox label='Chest/triceps' onChange={this.handleCheckbox} /><br/>
+		      <Checkbox label='Legs/calves' onChange={this.handleCheckbox} />
+		    </Form.Field>		
 		return (
 		  <Form onSubmit={this.handleSubmit}>
 		    <Form.Field>
@@ -69,14 +84,8 @@ class PlanForm extends React.Component {
 		      <label>How many weeks do you want your program to run for?</label>
 		      <input type='number' min='4' max='12' placeholder='Please enter 4-12' onChange={this.handleProgramLength} value={this.state.programLength} />
 		    </Form.Field>
-		    <Form.Field>
-		    <label>If you're working out less than 4 days a week, please select the muscle groups you would like to work on</label>
-		      <Checkbox label='Back/biceps' name='backBiceps' onChange={this.handleCheckbox} /><br/>
-		      <Checkbox label='Shoulder/abs' onChange={this.handleCheckbox} /><br/>
-		      <Checkbox label='Chest/triceps' onChange={this.handleCheckbox} /><br/>
-		      <Checkbox label='Legs/calves' onChange={this.handleCheckbox} />
-		    </Form.Field>
-		    <Button type='submit'>Submit</Button>
+		    {this.state.daysAWeek != 4 ? checkbox : null}
+			<Button type='submit'>Submit</Button>
 		  </Form>
 		)
 	}

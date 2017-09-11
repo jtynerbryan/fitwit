@@ -3,8 +3,7 @@ import List from './List'
 
 const WeekContainer = (props) => {
 	return <div>
-			<h1>Week 1</h1>
-		   <List exercise={props.exercise}/>
+			<h1>Week {props.week}</h1>
 		   </div>
 }
 
