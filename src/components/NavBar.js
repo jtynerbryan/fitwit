@@ -12,38 +12,39 @@ class NavBar extends Component {
     super()
     this.state = {
       activeItem: 'home'
-
     }
-
-  }
-  
-  static propTypes = {
-    color: PropTypes.string,
   }
 
   handleItemClick = (e, { name }) => this.setState({ activeItem: name })
+
+  handleClickHome = (e) => {
+    this.props.history.push('/welcome')
+  }
+
+  handleClickSignup = (e) => {
+    this.props.history.push('/signup')
+  }
+
+  handleClickLogin = (e) => {
+    this.props.history.push('/login')
+  }
+
+  logout = () => {
+    this.props.history.push('/login')
+    this.props.logout()
+  }
 
   render() {
     const { color } = this.props
     const { activeItem } = this.state
 
     return (
-      <Menu color={color} inverted widths={12} >
-        <Menu.Menu />
-          <Menu.Item name='FitWit' onClick={this.handleItemClick}/>
-        <Menu.Menu position='right'/>
-          <Menu.Item name='login' active={activeItem === 'login'} onClick={this.handleItemClick} />
-          <Menu.Item name='signup' active={activeItem === 'signup'} onClick={this.handleItemClick} />
-          <Menu.Item name='logout' active={activeItem === 'logout'} onClick={this.props.logout} />
+      <Menu color={color} inverted >
+          <Menu.Item name='FitWit' onClick={this.handleClickHome}/>
+          { localStorage.getItem('token') ? <Menu.Menu position='right'><Menu.Item name='logout' active={activeItem === 'logout'} onClick={this.logout}/></Menu.Menu> : <Menu.Menu position='right'><Menu.Item name='signup' active={activeItem === 'signup'} onClick={this.handleClickSignup} /> <Menu.Item name='login' active={activeItem === 'login'} onClick={this.handleClickLogin} /></Menu.Menu> }
       </Menu>
     )
   }
-}
-
-const MenuExampleColoredInvertedMenus = () => {
-  const menus = <NavBar color='grey' />
-
-  return <div>{menus}</div>
 }
 
 export default NavBar

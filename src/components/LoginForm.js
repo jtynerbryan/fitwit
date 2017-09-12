@@ -33,23 +33,21 @@ class LoginForm extends React.Component{
     }
 
     Auth.login(userParams)
-      .then((json) => {
-        this.setState({
-          username: "",
-          password: ""
-        })
-
+      .then(json => {
 
         if (json.message) {
           this.setState({
             error: json.message
           })
-          console.log(json)
         } else {
-          localStorage.setItem("token", json.jwt)
+          console.log(this)
+          this.props.login(json)
           this.props.history.replace("/welcome")
         }
-
+      })
+      this.setState({
+        username: "",
+        password: ""
       })
   }
 
@@ -57,7 +55,6 @@ class LoginForm extends React.Component{
   render(){
     return(
       <div>
-
         <h1>Fitwit Login</h1>
         <p>{this.state.error}</p>
         <form onSubmit={this.handleSubmit}>

@@ -32,44 +32,28 @@ class App extends Component {
     }
   }
 
-  loginUser = (userParams) => {
-    Auth.login(userParams)
-      .then(user => {
-        localStorage.setItem('jwt', user.jwt)
-        this.setState({
-          currentUser: user,
-          isLoggedIn: true
-        })
-
-      })
+  onUserLogin = (user) => {
+    localStorage.setItem('token', user.jwt)
+    this.setState({
+      currentUser: user,
+      isLoggedIn: true
+    })
   }
 
-  signupUser = (userParams) => {
-    Auth.signup(userParams)
-      .then(user => {
-        localStorage.setItem('jwt', user.jwt)
-        this.setState({
-          currentUser: user,
-          isLoggedIn: true
-        })
-
-      })
-  }  
+  signupUser = (user) => {
+    localStorage.setItem('token', user.jwt)
+    this.setState({
+      currentUser: user,
+      isLoggedIn: true
+    })
+  }
 
   logout = () => {
+    console.log(this)
     Auth.logOut()
     this.setState({
       currentUser: {}
-    }, console.log('logged out'))
-    this.props.history.push('/login')
-  }
-
-  handleButtonClick = () => {
-    Auth.me().then(user => {
-      console.log(user)
-
     })
-
   }
 
   componentDidMount() {
@@ -124,7 +108,6 @@ class App extends Component {
     .then(res => this.setState({
       calves: res["results"]
     }))
-
   }
 
   setPlanObject = (obj) => {
@@ -137,14 +120,39 @@ class App extends Component {
   createPlan = (obj) => {
     const addToExercises = Object.entries(obj).filter(item => item[1] === true).map(item => item[0].split('And'))
     addToExercises.forEach(item => item.forEach(ele => this.state.exercises.push(this.state[ele.toLowerCase()])))
+
+    this.state.exercises.map(muscleGroup => muscleGroup.map(exercise => {
+      const exerciseJSON = JSON.stringify({name: exercise.name, description: exercise.description, username: this.state.currentUser.user.username})
+      return fetch('http://localhost:3001/api/v1/exercises',{
+        method: 'post',
+        body: exerciseJSON,
+        headers: {
+          "Content-Type":"application/json",
+          "Accept":"application/json"
+        }
+      })
+    }))
+  }
+
+  static signup = (userParams) => {
+    const userJSON = JSON.stringify(userParams)
+    return fetch('http://localhost:3001/api/v1/signup',{
+      method: 'post',
+      body: userJSON,
+      headers: {
+        "Content-Type":"application/json",
+        "Accept":"application/json"
+      }
+    })
+      .then(res => res.json())
   }
 
   render() {
     return (
       <div>
-        <NavBar color='black' title="FitWit" logout={this.logout}/>
-        <Route path="/login" render={(props) => <LoginForm login={this.loginUser} {...props} />} />
-        <Route path="/welcome" render={(props) => {
+        <Route path="/" render={(props) => <NavBar color='black' title="FitWit" logout={this.logout} {...props}/> } />
+        <Route path="/login" render={(props) => <LoginForm login={this.onUserLogin} {...props} />} />
+        <Route path="/welcome" render={() => {
           const returnComponent = this.state.plan == null ? <PlanForm setPlanObject={this.setPlanObject}/> : <WorkoutContainer exercises={this.state.exercises} plan={this.state.plan}/>
           return returnComponent
         }}/>

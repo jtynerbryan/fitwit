@@ -29,7 +29,6 @@ class SignupForm extends React.Component{
     })
   }
 
-
   handleSubmit = (e) => {
     e.preventDefault()
 
@@ -40,14 +39,19 @@ class SignupForm extends React.Component{
     }
 
     Auth.signup(userParams)
-      .then((user) => {
-        this.setState({
-          username: "",
-          password: "",
-          name: ""
-        })
-        localStorage.setItem("token", user.jwt)
-        this.props.history.replace("/welcome")
+      .then((json) => {
+        if (json.message) {
+          this.setState({
+            error: json.message
+          })
+        } else {
+          this.props.signup(json)
+          this.props.history.replace("/welcome")
+        }
+      })
+      this.setState({
+        username: "",
+        password: ""
       })
   }
 
@@ -62,7 +66,7 @@ class SignupForm extends React.Component{
           <label>Username: </label>
           <input type='text' name='username' onChange={this.changeUsername} value={this.state.username}/><br/>
           <label>Password: </label>
-          <input type='password' name='password' onChange={this.changePassword} value={this.state.password}/><br/>         
+          <input type='password' name='password' onChange={this.changePassword} value={this.state.password}/><br/>
           <input type='submit' name='submit' value='Submit'/>
         </form>
       </div>
