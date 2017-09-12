@@ -84,7 +84,7 @@ class PlanForm extends React.Component {
 		      <label>How many weeks do you want your program to run for?</label>
 		      <input type='number' min='4' max='12' placeholder='Please enter 4-12' onChange={this.handleProgramLength} value={this.state.programLength} />
 		    </Form.Field>
-		    {this.state.daysAWeek != 4 ? checkbox : null}
+		    {this.state.daysAWeek !== 4 ? checkbox : null}
 			<Button type='submit'>Submit</Button>
 		  </Form>
 		)

@@ -77,7 +77,7 @@ class App extends Component {
     .then(res => res.json())
     .then(res => this.setState({
       calves: res["results"]
-    }, () => console.log(this.state)))
+    }))
 
   }
 
@@ -88,22 +88,16 @@ class App extends Component {
     this.createPlan(obj)
   }
 
-  randomExercises = (ar) => {
-    let array = ar.sort( function() {return 0.5 - Math.random() } )
-    return [array[0], array[1]]
-  }
-
   createPlan = (obj) => {
-    const addToExercises = Object.entries(obj).filter((item)=> item[1] === true)[0][0].split("And")
-    addToExercises.forEach((item)=>{ this.state.exercises.push(this.randomExercises(this.state[item.toLowerCase()]))})
+    const addToExercises = Object.entries(obj).filter(item => item[1] === true).map(item => item[0].split('And'))
+    addToExercises.forEach(item => item.forEach(ele => this.state.exercises.push(this.state[ele.toLowerCase()])))
   }
 
   render() {
-    console.log(this.state)
     return (
       <div>
         <NavBar color='black' title="FitWit"/>
-        {this.state.plan == null ? <PlanForm setPlanObject={this.setPlanObject}/> : <WorkoutContainer exercises={this.state.exercises}plan={this.state.plan}/>}
+        {this.state.plan == null ? <PlanForm setPlanObject={this.setPlanObject}/> : <WorkoutContainer exercises={this.state.exercises} plan={this.state.plan}/>}
       </div>
     );
   }
