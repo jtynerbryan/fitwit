@@ -9,7 +9,7 @@ class WorkoutContainer extends React.Component{
 	workoutContainers = () => {
 		const allContainers = []
 		for(let i = 1; i <= this.props.plan.programLength; i++){
-			allContainers.push(<WeekContainer key={i} week={i} plan={this.props.plan}/>)
+			allContainers.push(<WeekContainer key={i} week={i} exercises={this.props.exercises} plan={this.props.plan}/>)
 		}
 		return allContainers
 	}

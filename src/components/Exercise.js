@@ -3,12 +3,10 @@ import ReactHtmlParser from 'react-html-parser';
 
 const Exercise  = (props) => {
 	return <div>
-	hi
+		<strong>{props.exercise.name}</strong>
+		{props.exercise.description ? ReactHtmlParser(props.exercise.description) : null}
+		<br></br>
 	</div>
 }
 
 export default Exercise
-
-		// <h1>{props.exercise.name}</h1>
-		// {props.exercise.description ? ReactHtmlParser(props.exercise.description) : null}
-		// <br></br>

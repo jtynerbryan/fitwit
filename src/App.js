@@ -94,28 +94,19 @@ class App extends Component {
   }
 
   createPlan = (obj) => {
-    if (obj.daysAWeek === 4) {
-      this.setState({
-        exercises: [...this.state.exercises, this.randomExercises(this.state.biceps), 
-        this.randomExercises(this.state.back), this.randomExercises(this.state.shoulder), 
-        this.randomExercises(this.state.abs), this.randomExercises(this.state.chest), 
-        this.randomExercises(this.state.triceps), this.randomExercises(this.state.legs),
-        this.randomExercises(this.state.calves)]
-
-      }, () => console.log(this.state.exercises))
-    }
+    const addToExercises = Object.entries(obj).filter((item)=> item[1] === true)[0][0].split("And")
+    addToExercises.forEach((item)=>{ this.state.exercises.push(this.randomExercises(this.state[item.toLowerCase()]))})
   }
 
   render() {
+    console.log(this.state)
     return (
       <div>
         <NavBar color='black' title="FitWit"/>
-        {this.state.plan == null ? <PlanForm setPlanObject={this.setPlanObject}/> : <WorkoutContainer plan={this.state.plan}/>}
+        {this.state.plan == null ? <PlanForm setPlanObject={this.setPlanObject}/> : <WorkoutContainer exercises={this.state.exercises}plan={this.state.plan}/>}
       </div>
     );
   }
 }
 
 export default App;
-
-//<Welcome exercise={this.state.biceps[Math.floor(Math.random()*this.state.biceps.length)]}/>

@@ -6,7 +6,7 @@ const Session = (props) => {
   return (
     <div>
       <h2>Session {props.session}</h2>
-      <Exercise exercise={props.exercise} />
+      {props.exercises.map(e => <Exercise exercise={e} />)}
     </div>
   )
 }

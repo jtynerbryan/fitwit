@@ -6,10 +6,10 @@ class PlanForm extends React.Component {
 		super()
 
 		this.state = {
-			backBiceps: false,
-			shoulderAbs: false,
-			chestTriceps: false,
-			legsCalves: false,
+			backAndBiceps: false,
+			shoulderAndAbs: false,
+			chestAndTriceps: false,
+			legsAndCalves: false,
 			daysAWeek: undefined,
 			programLength: undefined
 		}
@@ -19,15 +19,15 @@ class PlanForm extends React.Component {
 		event.preventDefault()
 		if (this.state.daysAWeek === 4) {
 			this.setState({
-				backBiceps: true,
-				shoulderAbs: true,
-				chestTriceps: true,
-				legsCalves: true
+				backAndBiceps: true,
+				shoulderAndAbs: true,
+				chestAndTriceps: true,
+				legsAndCalves: true
 
 			}, () => this.props.setPlanObject(this.state))
+		} else{
+			this.props.setPlanObject(this.state)
 		}
-
-
 	}
 
 	handleDaysAWeek = (event) => {
@@ -45,22 +45,22 @@ class PlanForm extends React.Component {
 	handleCheckbox = (event) => {
 		if (event.target.innerHTML === 'Back/biceps'){
 			this.setState({
-				backBiceps: !this.state.backBiceps
+				backAndBiceps: !this.state.backBiceps
 			})
 		}
 		else if (event.target.innerHTML === 'Shoulder/abs'){
 			this.setState({
-				shoulderAbs: !this.state.shoulderAbs
+				shoulderAndAbs: !this.state.shoulderAbs
 			})
 		}
 		else if (event.target.innerHTML === 'Chest/triceps'){
 			this.setState({
-				chestTriceps: !this.state.chestTriceps
+				chestAndTriceps: !this.state.chestTriceps
 			})
 		}
 		else if (event.target.innerHTML === 'Legs/calves'){
 			this.setState({
-				legsCalves: !this.state.legsCalves
+				legsAndCalves: !this.state.legsCalves
 			})
 		}
 
@@ -69,7 +69,7 @@ class PlanForm extends React.Component {
 	render() {
 		const checkbox =  <Form.Field>
 		    <label>If you're working out less than 4 days a week, please select the muscle groups you would like to work on</label>
-		      <Checkbox label='Back/biceps' name='backBiceps' onChange={this.handleCheckbox} /><br/>
+		      <Checkbox label='Back/biceps'  onChange={this.handleCheckbox} /><br/>
 		      <Checkbox label='Shoulder/abs' onChange={this.handleCheckbox} /><br/>
 		      <Checkbox label='Chest/triceps' onChange={this.handleCheckbox} /><br/>
 		      <Checkbox label='Legs/calves' onChange={this.handleCheckbox} />
