@@ -21,13 +21,13 @@ class SignupForm extends React.Component{
     this.setState({
       password: e.target.value
     })
-  }  
+  }
 
   changeName = (e) => {
     this.setState({
       name: e.target.value
     })
-  } 
+  }
 
 
   handleSubmit = (e) => {
@@ -38,7 +38,7 @@ class SignupForm extends React.Component{
       password: this.state.password,
       name: this.state.name
     }
-    
+
     Auth.login(userParams)
       .then((user) => {
         this.setState({
@@ -57,11 +57,11 @@ class SignupForm extends React.Component{
         <h1>Fitwit Signup</h1>
         <form onSubmit={this.handleSubmit}>
           <label>Name: </label>
-          <input type='text' name='name' onChange={this.changeName} value={this.state.name}/><br/>        
+          <input type='text' name='name' onChange={this.changeName} value={this.state.name}/><br/>
           <label>Username: </label>
           <input type='text' name='username' onChange={this.changeUsername} value={this.state.username}/><br/>
           <label>Password: </label>
-          <input type='text' name='password' onChange={this.changePassword} value={this.state.password}/><br/>         
+          <input type='password' name='password' onChange={this.changePassword} value={this.state.password}/><br/>         
           <input type='submit' name='submit' value='Submit'/>
         </form>
       </div>

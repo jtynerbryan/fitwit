@@ -9,22 +9,32 @@ class Auth {
         "Accept":"application/json"
       }
     })
-      .then(res => res.json())
+      .then(res => {
+
+          if (res.status == 204) {
+            return {
+              message: "Error Wrong user"
+            }
+          } else if (res.status == 200){
+            return res.json()
+          }
+
+
+        }
+      )
   }
 
-  static signup() {
-
-  }
-
-  static me() {
-    const jwtToken = localStorage.getItem("token")
-    return fetch('http://localhost:3000/api/v1/me',{
-      headers:{
-        "Authorization":`Bearer ${jwtToken}`,
+  static signup(userParams) {
+    const userJSON = JSON.stringify(userParams)
+    return fetch('http://localhost:3001/api/v1/signup',{
+      method: 'post',
+      body: userJSON,
+      headers: {
+        "Content-Type":"application/json",
         "Accept":"application/json"
       }
     })
-    .then(res => res.json())
+      .then(res => res.json())
   }
 
 

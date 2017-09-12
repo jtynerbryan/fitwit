@@ -6,7 +6,8 @@ class LoginForm extends React.Component{
     super()
     this.state={
       username: '',
-      password: ''
+      password: '',
+      error: ''
     }
   }
 
@@ -20,7 +21,7 @@ class LoginForm extends React.Component{
     this.setState({
       password: e.target.value
     })
-  }  
+  }
 
 
   handleSubmit = (e) => {
@@ -30,15 +31,25 @@ class LoginForm extends React.Component{
       username: this.state.username,
       password: this.state.password
     }
-    
+
     Auth.login(userParams)
-      .then((user) => {
+      .then((json) => {
         this.setState({
           username: "",
           password: ""
         })
-        localStorage.setItem("token", user.jwt)
-        this.props.history.replace("/welcome")
+
+
+        if (json.message) {
+          this.setState({
+            error: json.message
+          })
+          console.log(json)
+        } else {
+          localStorage.setItem("token", json.jwt)
+          this.props.history.replace("/welcome")
+        }
+
       })
   }
 
@@ -46,12 +57,14 @@ class LoginForm extends React.Component{
   render(){
     return(
       <div>
+
         <h1>Fitwit Login</h1>
-        <form onSubmit={this.handleSubmit}>    
+        <p>{this.state.error}</p>
+        <form onSubmit={this.handleSubmit}>
           <label>Username: </label>
           <input type='text' name='username' onChange={this.changeUsername} value={this.state.username}/><br/>
           <label>Password: </label>
-          <input type='text' name='password' onChange={this.changePassword} value={this.state.password}/><br/>         
+          <input type='password' name='password' onChange={this.changePassword} value={this.state.password}/><br/>
           <input type='submit' name='submit' value='Submit'/>
         </form>
       </div>

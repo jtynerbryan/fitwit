@@ -18,7 +18,7 @@ class App extends Component {
     this.state = {
       currentUser: {},
       isLoggedIn: localStorage.getItem("jwt") ? true : false,
-      jwt: localStorage.getItem("jwt"),      
+      jwt: localStorage.getItem("jwt"),
       biceps: [0],
       back: [0],
       shoulder: [0],
@@ -50,7 +50,7 @@ class App extends Component {
 
     })
 
-  }  
+  }
 
   componentDidMount() {
     fetch('http://localhost:3001/api/v1/users')
@@ -123,13 +123,14 @@ class App extends Component {
     return (
       <div>
         <NavBar color='black' title="FitWit"/>
-        <LoginForm />
-        {this.state.plan == null ? <PlanForm setPlanObject={this.setPlanObject}/> : <WorkoutContainer exercises={this.state.exercises} plan={this.state.plan}/>}        
+        <Route path="/login" render={(props) => <LoginForm login={this.loginUser} {...props} />} />
+        <Route path="/welcome" render={(props) => {
+          const returnComponent = this.state.plan == null ? <PlanForm setPlanObject={this.setPlanObject}/> : <WorkoutContainer exercises={this.state.exercises} plan={this.state.plan}/>
+          return returnComponent
+        }}/>
       </div>
     );
   }
 }
 
 export default App;
-
-
