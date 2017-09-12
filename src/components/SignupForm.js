@@ -7,7 +7,7 @@ class SignupForm extends React.Component{
     this.state={
       username: '',
       password: '',
-      name: '',
+      name: ''
     }
   }
 
@@ -39,11 +39,12 @@ class SignupForm extends React.Component{
       name: this.state.name
     }
 
-    Auth.login(userParams)
+    Auth.signup(userParams)
       .then((user) => {
         this.setState({
           username: "",
-          password: ""
+          password: "",
+          name: ""
         })
         localStorage.setItem("token", user.jwt)
         this.props.history.replace("/welcome")

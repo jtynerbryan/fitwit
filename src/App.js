@@ -44,6 +44,26 @@ class App extends Component {
       })
   }
 
+  signupUser = (userParams) => {
+    Auth.signup(userParams)
+      .then(user => {
+        localStorage.setItem('jwt', user.jwt)
+        this.setState({
+          currentUser: user,
+          isLoggedIn: true
+        })
+
+      })
+  }  
+
+  logout = () => {
+    Auth.logOut()
+    this.setState({
+      currentUser: {}
+    }, console.log('logged out'))
+    this.props.history.push('/login')
+  }
+
   handleButtonClick = () => {
     Auth.me().then(user => {
       console.log(user)
@@ -122,12 +142,13 @@ class App extends Component {
   render() {
     return (
       <div>
-        <NavBar color='black' title="FitWit"/>
+        <NavBar color='black' title="FitWit" logout={this.logout}/>
         <Route path="/login" render={(props) => <LoginForm login={this.loginUser} {...props} />} />
         <Route path="/welcome" render={(props) => {
           const returnComponent = this.state.plan == null ? <PlanForm setPlanObject={this.setPlanObject}/> : <WorkoutContainer exercises={this.state.exercises} plan={this.state.plan}/>
           return returnComponent
         }}/>
+        <Route path="/signup" render={(props) => <SignupForm signup={this.signupUser} {...props} />} />
       </div>
     );
   }

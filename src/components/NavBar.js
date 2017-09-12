@@ -7,12 +7,19 @@ const colors = [
   'blue', 'violet', 'purple', 'pink', 'brown', 'grey', 'black',
 ]
 
-class ExampleMenu extends Component {
+class NavBar extends Component {
+  constructor() {
+    super()
+    this.state = {
+      activeItem: 'home'
+
+    }
+
+  }
+  
   static propTypes = {
     color: PropTypes.string,
   }
-
-  state = { activeItem: 'home' }
 
   handleItemClick = (e, { name }) => this.setState({ activeItem: name })
 
@@ -25,17 +32,18 @@ class ExampleMenu extends Component {
         <Menu.Menu />
           <Menu.Item name='FitWit' onClick={this.handleItemClick}/>
         <Menu.Menu position='right'/>
-          <Menu.Item name='login' active={activeItem === 'messages'} onClick={this.handleItemClick} />
-          <Menu.Item name='signup' active={activeItem === 'friends'} onClick={this.handleItemClick} />
+          <Menu.Item name='login' active={activeItem === 'login'} onClick={this.handleItemClick} />
+          <Menu.Item name='signup' active={activeItem === 'signup'} onClick={this.handleItemClick} />
+          <Menu.Item name='logout' active={activeItem === 'logout'} onClick={this.props.logout} />
       </Menu>
     )
   }
 }
 
 const MenuExampleColoredInvertedMenus = () => {
-  const menus = <ExampleMenu color='grey' />
+  const menus = <NavBar color='grey' />
 
   return <div>{menus}</div>
 }
 
-export default MenuExampleColoredInvertedMenus
+export default NavBar
