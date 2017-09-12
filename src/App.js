@@ -152,8 +152,8 @@ class App extends Component {
       <div>
         <Route path="/" render={(props) => <NavBar color='black' title="FitWit" logout={this.logout} {...props}/> } />
         <Route path="/login" render={(props) => <LoginForm login={this.onUserLogin} {...props} />} />
-        <Route path="/welcome" render={() => {
-          const returnComponent = this.state.plan == null ? <PlanForm setPlanObject={this.setPlanObject}/> : <WorkoutContainer exercises={this.state.exercises} plan={this.state.plan}/>
+        <Route path="/welcome" render={(props) => {
+          const returnComponent = this.state.plan == null ? <PlanForm setPlanObject={this.setPlanObject} {...props}/> : <WorkoutContainer username={this.state.currentUser.user.username} plan={this.state.plan} {...props} />
           return returnComponent
         }}/>
         <Route path="/signup" render={(props) => <SignupForm signup={this.signupUser} {...props} />} />
