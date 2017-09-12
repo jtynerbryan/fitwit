@@ -1,13 +1,12 @@
 import React from 'react'
 import Auth from '../adapters/auth'
 
-class SignupForm extends React.Component{
+class LoginForm extends React.Component{
   constructor(){
     super()
     this.state={
       username: '',
-      password: '',
-      name: '',
+      password: ''
     }
   }
 
@@ -23,20 +22,13 @@ class SignupForm extends React.Component{
     })
   }  
 
-  changeName = (e) => {
-    this.setState({
-      name: e.target.value
-    })
-  } 
-
 
   handleSubmit = (e) => {
     e.preventDefault()
 
     const userParams = {
       username: this.state.username,
-      password: this.state.password,
-      name: this.state.name
+      password: this.state.password
     }
     
     Auth.login(userParams)
@@ -54,10 +46,8 @@ class SignupForm extends React.Component{
   render(){
     return(
       <div>
-        <h1>Fitwit Signup</h1>
-        <form onSubmit={this.handleSubmit}>
-          <label>Name: </label>
-          <input type='text' name='name' onChange={this.changeName} value={this.state.name}/><br/>        
+        <h1>Fitwit Login</h1>
+        <form onSubmit={this.handleSubmit}>    
           <label>Username: </label>
           <input type='text' name='username' onChange={this.changeUsername} value={this.state.username}/><br/>
           <label>Password: </label>
@@ -70,4 +60,4 @@ class SignupForm extends React.Component{
 }
 
 
-export default SignupForm
+export default LoginForm

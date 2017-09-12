@@ -7,12 +7,18 @@ import Welcome from './components/Welcome'
 import PlanForm from './components/PlanForm'
 import WorkoutContainer from './components/WorkoutContainer'
 import {Link, Route} from 'react-router-dom'
+import SignupForm from './components/SignupForm'
+import LoginForm from './components/LoginForm'
+import Auth from './adapters/auth'
 
 class App extends Component {
   constructor() {
     super()
 
     this.state = {
+      currentUser: {},
+      isLoggedIn: localStorage.getItem("jwt") ? true : false,
+      jwt: localStorage.getItem("jwt"),      
       biceps: [0],
       back: [0],
       shoulder: [0],
@@ -25,6 +31,26 @@ class App extends Component {
       exercises: []
     }
   }
+
+  loginUser = (userParams) => {
+    Auth.login(userParams)
+      .then(user => {
+        localStorage.setItem('jwt', user.jwt)
+        this.setState({
+          currentUser: user,
+          isLoggedIn: true
+        })
+
+      })
+  }
+
+  handleButtonClick = () => {
+    Auth.me().then(user => {
+      console.log(user)
+
+    })
+
+  }  
 
   componentDidMount() {
     fetch('http://localhost:3001/api/v1/users')
@@ -97,10 +123,13 @@ class App extends Component {
     return (
       <div>
         <NavBar color='black' title="FitWit"/>
-        {this.state.plan == null ? <PlanForm setPlanObject={this.setPlanObject}/> : <WorkoutContainer exercises={this.state.exercises} plan={this.state.plan}/>}
+        <LoginForm />
+        {this.state.plan == null ? <PlanForm setPlanObject={this.setPlanObject}/> : <WorkoutContainer exercises={this.state.exercises} plan={this.state.plan}/>}        
       </div>
     );
   }
 }
 
 export default App;
+
+

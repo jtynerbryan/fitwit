@@ -1,31 +1,21 @@
 import React from 'react'
 import WorkoutContainer from './WorkoutContainer'
+import Auth from '../adapters/auth'
 
 class Welcome extends React.Component {
-  constructor(){
-    super()
 
-    this.state={
-      name: '',
-      password: '',
-      email: ''
-    }
+  logout = () => {
+    Auth.logOut()
+    this.props.history.push('/login')
   }
 
-  handleSignup = (obj) => {
-    this.setState({
-      name: obj.name,
-      password: obj.password,
-      email: obj.email
-    })
-  }
-
-  render(){
+  render() {
     return(
       <div>
         <h1>Welcome to FitWit</h1>
         <h4>blah blah blah</h4>
-        <WorkoutContainer exercise={this.props.exercise}/>
+        <button onClick={this.logout}>Logout</button>
+
       </div>
     )
   }
