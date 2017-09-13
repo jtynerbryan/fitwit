@@ -10,9 +10,9 @@ class WorkoutContainer extends React.Component {
 		}
 	}
 
-	componentDidMount = () => {
+	componentDidMount(){
 			const usernameJSON = JSON.stringify({username: this.props.username})
-		    return fetch('http://localhost:3001/api/v1/exercises',{
+		    return fetch('http://localhost:3001/api/v1/exercises', {
 		      method: 'get',
 		      headers: {
 		        "Content-Type":"application/json",
@@ -21,26 +21,24 @@ class WorkoutContainer extends React.Component {
 		      }
 		    })
 			.then(res => res.json())
-			.then(res => console.log(res))
+			.then(res => this.setState({exercises: res.exercises}))
 	}
 
-	// const workoutContainers = () => {
-	// 	const allContainers = []
-	// 	for(let i = 1; i <= this.props.plan.programLength; i++){
-	// 		allContainers.push(<WeekContainer key={i} week={i} exercises={this.props.exercises} plan={this.props.plan} />)
-	// 	}
-	// 	return allContainers
-	// }
+	workoutContainers = () => {
+		const allContainers = []
+		for(let i = 1; i <= this.props.plan.programLength; i++){
+			allContainers.push(<WeekContainer key={i} week={i} exercises={this.state.exercises} plan={this.props.plan} />)
+		}
+		return allContainers
+	}
 
-	// {workoutContainers().map(container => container)}
-
-	
 	render() {
 		return (
 			<div>
 				<h1>{this.props.username}'s Workout Plan</h1>
+				{this.workoutContainers().map(container => container)}
 			</div>
-		)		
+		)
 	}
 
 }
