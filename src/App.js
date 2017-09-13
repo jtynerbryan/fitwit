@@ -16,7 +16,7 @@ class App extends Component {
     super()
 
     this.state = {
-      currentUser: {},
+      currentUser: "",
       isLoggedIn: localStorage.getItem("jwt") ? true : false,
       jwt: localStorage.getItem("jwt"),
       biceps: [0],
@@ -28,7 +28,9 @@ class App extends Component {
       legs: [0],
       calves: [0],
       plan: null,
-      exercises: []
+      exercises: [],
+      daysAWeek: null,
+      programLength: null
     }
   }
 
@@ -56,64 +58,120 @@ class App extends Component {
     })
   }
 
+  shuffle(a) {
+      for (let i = a.length; i; i--) {
+          let j = Math.floor(Math.random() * i);
+          [a[i - 1], a[j]] = [a[j], a[i - 1]];
+      }
+      return a
+  }  
+
   componentDidMount() {
-    fetch('http://localhost:3001/api/v1/users')
-    .then(res => res.json())
-    .then(res => console.log(res))
+    // const usernameJSON = JSON.stringify({username: this.props.username})
+    //   return fetch('http://localhost:3001/api/v1/exercises', {
+    //     method: 'get',
+    //     headers: {
+    //       "Content-Type":"application/json",
+    //       "Accept":"application/json",
+    //       "username":usernameJSON
+    //     }
+    //   })
+    // .then(res => res.json())
+    // .then(res => this.setState({exercises: res.exercises}))
+    if (this.state.currentUser === ""){
+      const token = JSON.stringify({token: localStorage["token"]})
+      fetch('http://localhost:3001/current_user', {
+        headers: {
+          "Content-Type":"application/json",
+          "Accept":"application/json"
+        },
+        method: 'post',
+        body: token
+      })
+      .then( res => res.json() )
+      .then( data => this.setState({
+        currentUser: data
+        }, () => console.log("working?", this.state.currentUser)) 
+      )
+    } else {
+      console.log("current user is this", this.state.currentUser)
+    }
 
     fetch('https://wger.de/api/v2/exercise/?muscles=1&license_author=wger.de&language=2')
     .then(res => res.json())
+    .then(res => this.shuffle(res))
     .then(res => this.setState({
       biceps: res["results"]
     }))
 
     fetch('https://wger.de/api/v2/exercise/?muscles=9&license_author=wger.de&language=2')
     .then(res => res.json())
+    .then(res => this.shuffle(res))
     .then(res => this.setState({
       back: res["results"]
     }))
 
     fetch('https://wger.de/api/v2/exercise/?muscles=2&license_author=wger.de&language=2')
     .then(res => res.json())
+    .then(res => this.shuffle(res))
     .then(res => this.setState({
       shoulder: res["results"]
     }))
 
     fetch('https://wger.de/api/v2/exercise/?muscles=6&license_author=wger.de&language=2')
     .then(res => res.json())
+    .then(res => this.shuffle(res))
     .then(res => this.setState({
       abs: res["results"]
     }))
 
     fetch('https://wger.de/api/v2/exercise/?muscles=4&license_author=wger.de&language=2')
     .then(res => res.json())
+    .then(res => this.shuffle(res))
     .then(res => this.setState({
       chest: res["results"]
     }))
 
     fetch('https://wger.de/api/v2/exercise/?muscles=5&license_author=wger.de&language=2')
     .then(res => res.json())
+    .then(res => this.shuffle(res))
     .then(res => this.setState({
       triceps: res["results"]
     }))
 
     fetch('https://wger.de/api/v2/exercise/?muscles=10&license_author=wger.de&language=2')
     .then(res => res.json())
+    .then(res => this.shuffle(res))
     .then(res => this.setState({
       legs: res["results"]
     }))
 
     fetch('https://wger.de/api/v2/exercise/?muscles=7&license_author=wger.de&language=2')
     .then(res => res.json())
+    .then(res => this.shuffle(res))
     .then(res => this.setState({
       calves: res["results"]
     }))
+
   }
 
   setPlanObject = (obj) => {
+    const userJSON = JSON.stringify(obj)
+    console.log("plan object", this.state.currentUser)
+
+    fetch(`http://localhost:3001/api/v1/users/${this.state.currentUser.id}`,{
+      headers: {
+        "Content-Type":"application/json",
+        "Accept":"application/json"
+      },
+      method: 'PATCH',
+      body: userJSON
+    }).then( res => res.json() )
+    .then( data => console.log(data) )
+
     this.setState({
       plan: obj
-    })
+    }, () => console.log("i set the plan!", obj))
     this.createPlan(obj)
   }
 
@@ -148,12 +206,13 @@ class App extends Component {
   }
 
   render() {
+    console.log("this.state.currentUser", this.state.currentUser)
     return (
       <div>
         <Route path="/" render={(props) => <NavBar color='black' title="FitWit" logout={this.logout} {...props}/> } />
         <Route path="/login" render={(props) => <LoginForm login={this.onUserLogin} {...props} />} />
         <Route path="/welcome" render={(props) => {
-          const returnComponent = this.state.plan == null ? <PlanForm setPlanObject={this.setPlanObject} {...props}/> : <WorkoutContainer username={this.state.currentUser.user.username} plan={this.state.plan} {...props} />
+          const returnComponent = this.state.exercises === null ? <PlanForm setPlanObject={this.setPlanObject} {...props}/> : <WorkoutContainer user={this.state.currentUser} {...props} />
           return returnComponent
         }}/>
         <Route path="/signup" render={(props) => <SignupForm signup={this.signupUser} {...props} />} />

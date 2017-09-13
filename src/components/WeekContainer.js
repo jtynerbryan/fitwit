@@ -5,10 +5,9 @@ const WeekContainer = (props) => {
 
 	const sessionContainers = () => {
 		const allContainers = []
-		console.log('blaaaaah', props.exercises)
-		const exercises = props.exercises.reduce((a, b) => a.concat(b), [])
+		// const exercises = props.exercises.reduce((a, b) => a.concat(b), [])
 		for(let i = 1; i <= props.plan.daysAWeek; i++){
-			allContainers.push(<Session key={i} session={i} plan={props.plan} exercises={exercises} />)
+			allContainers.push(<Session key={i} session={i} plan={props.plan} exercises={props.exercises} />)
 		}
 		return allContainers
 	}

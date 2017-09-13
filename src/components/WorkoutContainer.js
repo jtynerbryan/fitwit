@@ -11,13 +11,13 @@ class WorkoutContainer extends React.Component {
 	}
 
 	componentDidMount(){
-			const usernameJSON = JSON.stringify({username: this.props.username})
+			const usernameJSON = JSON.stringify({username: this.props.user.username})
 		    return fetch('http://localhost:3001/api/v1/exercises', {
 		      method: 'get',
 		      headers: {
 		        "Content-Type":"application/json",
 		        "Accept":"application/json",
-		        "username":usernameJSON
+		        "username": usernameJSON
 		      }
 		    })
 			.then(res => res.json())
@@ -33,10 +33,11 @@ class WorkoutContainer extends React.Component {
 	}
 
 	render() {
+		console.log("props from workout container", this.props)
 		return (
 			<div>
 				<h1>{this.props.username}'s Workout Plan</h1>
-				{this.workoutContainers().map(container => container)}
+				{this.state.exercises.length > 4 ? this.workoutContainers().map(container => container) : <h1>Loading Exercises...</h1>}
 			</div>
 		)
 	}
