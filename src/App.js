@@ -64,20 +64,25 @@ class App extends Component {
           [a[i - 1], a[j]] = [a[j], a[i - 1]];
       }
       return a
-  }  
+  }
+
+  getUserExercises(){
+  const usernameJSON = JSON.stringify({username: this.props.username})
+    return fetch(`http://localhost:3001/api/v1/exercises/${this.state.currentUser.id}`, {
+      method: 'get',
+      headers: {
+        "Content-Type":"application/json",
+        "Accept":"application/json"
+      }
+    })
+    .then(res => res.json())
+    .then(res => this.setState({
+      exercises: res.exercises
+    }))
+  }
+  // .then(res => this.setState({exercises: res.exercises}))
 
   componentDidMount() {
-    // const usernameJSON = JSON.stringify({username: this.props.username})
-    //   return fetch('http://localhost:3001/api/v1/exercises', {
-    //     method: 'get',
-    //     headers: {
-    //       "Content-Type":"application/json",
-    //       "Accept":"application/json",
-    //       "username":usernameJSON
-    //     }
-    //   })
-    // .then(res => res.json())
-    // .then(res => this.setState({exercises: res.exercises}))
     if (this.state.currentUser === ""){
       const token = JSON.stringify({token: localStorage["token"]})
       fetch('http://localhost:3001/current_user', {
@@ -91,8 +96,8 @@ class App extends Component {
       .then( res => res.json() )
       .then( data => this.setState({
         currentUser: data
-        }, () => console.log("working?", this.state.currentUser)) 
-      )
+      }, this.getUserExercises ))
+
     } else {
       console.log("current user is this", this.state.currentUser)
     }
@@ -180,7 +185,7 @@ class App extends Component {
     addToExercises.forEach(item => item.forEach(ele => this.state.exercises.push(this.state[ele.toLowerCase()])))
 
     this.state.exercises.map(muscleGroup => muscleGroup.map(exercise => {
-      const exerciseJSON = JSON.stringify({name: exercise.name, description: exercise.description, username: this.state.currentUser.user.username})
+      const exerciseJSON = JSON.stringify({name: exercise.name, description: exercise.description, username: this.state.currentUser.username})
       return fetch('http://localhost:3001/api/v1/exercises',{
         method: 'post',
         body: exerciseJSON,
@@ -206,18 +211,20 @@ class App extends Component {
   }
 
   render() {
-    console.log("this.state.currentUser", this.state.currentUser)
-    return (
-      <div>
-        <Route path="/" render={(props) => <NavBar color='black' title="FitWit" logout={this.logout} {...props}/> } />
-        <Route path="/login" render={(props) => <LoginForm login={this.onUserLogin} {...props} />} />
-        <Route path="/welcome" render={(props) => {
-          const returnComponent = this.state.exercises === null ? <PlanForm setPlanObject={this.setPlanObject} {...props}/> : <WorkoutContainer user={this.state.currentUser} {...props} />
-          return returnComponent
-        }}/>
-        <Route path="/signup" render={(props) => <SignupForm signup={this.signupUser} {...props} />} />
-      </div>
-    );
+    console.log("exercises ??", this.state.exercises)
+
+      return (
+        <div>
+          <Route path="/" render={(props) => <NavBar color='black' title="FitWit" logout={this.logout} {...props}/> } />
+          <Route path="/login" render={(props) => <LoginForm login={this.onUserLogin} {...props} />} />
+          <Route path="/welcome" render={(props) => {
+            const returnComponent = this.state.exercises.length === 0 ? <PlanForm setPlanObject={this.setPlanObject} {...props}/> : <WorkoutContainer exercises={this.state.exercises} user={this.state.currentUser} {...props} />
+            return returnComponent
+          }}/>
+          <Route path="/signup" render={(props) => <SignupForm signup={this.signupUser} {...props} />} />
+        </div>
+      );
+
   }
 }
 
